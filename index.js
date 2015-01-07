@@ -150,6 +150,11 @@ Browserify.prototype.require = function (file, opts) {
     if (!row.id) {
         row.id = expose || file;
     }
+    if (isExternalModule(file) && expose !== file) { 
+        var temp = expose;
+        row.id = file;
+        row.expose = row.id; 
+    }
     if (expose || !row.entry) {
         this._expose[row.id] = path.resolve(basedir, file);
     }
@@ -162,7 +167,7 @@ Browserify.prototype.require = function (file, opts) {
     
     if (row.entry) row.order = self._entryOrder ++;
     if (opts.transform === false) row.transform = false;
-    
+    console.log(JSON.stringify(row)) 
     this.pipeline.write(row);
     return this;
 };
